@@ -15,36 +15,64 @@
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
     {{-- CDN Jquery --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
-        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
+
     {{-- CDN SlickJs --}}
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
+    {{-- CDN Quill --}}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+
+    {{-- bootstrap 5 bundle --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         html,
         body {
             overflow-x: hidden;
+        }
+
+        .slick-slide {
+            outline: none;
+        }
+
+        .slick-list {
+            margin: 0 -10px;
+        }
+
+        .slick-slide>div {
+            padding: 0 10px;
+        }
+
+        .admin-nav-scroll {
+            max-width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+            white-space: nowrap;
+        }
+
+        .admin-nav-scroll::-webkit-scrollbar {
+            display: none;
         }
     </style>
     @stack('styles')
 </head>
 
 <body>
-    {{-- Navbar Components --}}
-    @include('components.navbar')
-
-    {{-- Content --}}
-    <main>
-        @yield('content')
-    </main>
-
-    {{-- Footer components --}}
-    @include('components.footer')
+    <x-navbar />
+    @yield('content')
+    <x-footer />
 
     <!-- cdn tabler -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.5.1/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
+    {{-- CDN Quill --}}
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     @stack('scripts')
 </body>
 

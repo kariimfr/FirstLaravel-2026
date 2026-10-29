@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'cover',
     'title',
+    'author',
     'price',
     'description',
     'language',
     'publisher',
-    'weitter',
-    'realese_date',
+    'writer',
+    'release_date',
     'page_of_book',
     'book_category_id'
 ])]
