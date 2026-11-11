@@ -17,9 +17,8 @@ class BookCategoryController extends Controller
             $model = BookCategory::query();
 
             return DataTables::eloquent($model)
-                // Menambahkan penomoran otomatis (kolom 'DT_RowIndex')
                 ->addIndexColumn()
-                // Menambahkan kolom tombol Aksi (Edit & Hapus)
+                // Edit, Hapus
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.book-categories.edit', $row->id);
                     $destroyUrl = route('admin.book-categories.destroy', $row->id);
@@ -35,7 +34,6 @@ class BookCategoryController extends Controller
                         </form>
                     ';
                 })
-                // Memberitahu Yajra bahwa kolom 'action' mengandung tag HTML
                 ->rawColumns(['action'])
                 ->toJson();
         }

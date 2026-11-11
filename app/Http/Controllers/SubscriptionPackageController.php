@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SubscriptionPackage;
 use Yajra\DataTables\Facades\DataTables;
 
-class SubscriptionController extends Controller
+class SubscriptionPackageController extends Controller
 {
     /**
      * Display a listing of the resource using Yajra DataTables.
@@ -35,12 +35,13 @@ class SubscriptionController extends Controller
                             ' . $csrf . '
                             ' . $method . '
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Apakah Anda yakin ingin menghapus paket ini?\')">Hapus</button>
-                        </form>
-                    ';
+                        </form>' . "<a href='" . route('admin.subscription-packages.books', $row->id) . "'
+                    class='btn btn-sm btn-secondary'>pilih buku</a>";
                 })
                 ->rawColumns(['action'])
                 ->toJson();
         }
+
 
         return view('admin.subscriptions.index');
     }

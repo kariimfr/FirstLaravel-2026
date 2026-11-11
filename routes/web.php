@@ -1,12 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookCategoryController;
-use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SubscriptionPackageController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SubscriptionPackageBookController;
 use App\Http\Controllers\BookController;
-
 // ngambil data dari data base = user contoller
 Route::get('/', [UserController::class, 'home'])->name('home');
 Route::get('/search', [UserController::class, 'search'])->name('search');
@@ -34,11 +33,17 @@ Route::middleware(['IsLoggedIn'])->group(function () {
             return view('admin.dashboard');
         })->name('dashboard');
 
+        // package books : memilih paket langganan
+        // {} path dinamis = lebih spesifik
+        Route::get('/subscription-packages/{id}/books', [SubscriptionPackageBookController::class, 'index'])
+            ->name('subscription-packages.books');
+        Route::post('/subscription/{id}/books', [SubscriptionPackageBookController::class, 'store'])
+            ->name('subscription-packages.books.store');
+
         // book category controller
         Route::resource('book-categories', BookCategoryController::class);
-
         // subscription controller
-        Route::resource('subscriptions', SubscriptionController::class);
+        Route::resource('subscriptions', SubscriptionPackageController::class);
         Route::resource('books', BookController::class);
     });
 });

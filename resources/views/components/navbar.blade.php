@@ -11,7 +11,6 @@
                 height="50" alt="Tabler" class="navbar-brand-logo">Ebooks
         </a>
         <!-- END NAVBAR LOGO -->
-
         <div class="navbar-nav mx-auto w-50 d-flex flex-row align-items-center gap-3">
             @if (Auth::check() && Auth::user()->role == 'admin')
                 {{-- 1. Menu Khusus Admin --}}

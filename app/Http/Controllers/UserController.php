@@ -91,7 +91,7 @@ class UserController extends Controller
         $freeBooks = Book::where('price', 0)->orderBy('created_at', 'desc')->limit(6)->get();
 
         // ambil paket dari 3 ter atas
-        $subscriptionPackages = SubscriptionPackage::limit(3)->get();
+        $subscriptionPackages = SubscriptionPackage::latest()->limit(3)->get();
         return view('home', compact('latestBooks', 'freeBooks', 'subscriptionPackages'));
     }
 

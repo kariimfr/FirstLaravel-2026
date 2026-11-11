@@ -72,7 +72,7 @@
                     <!-- KARTU -->
                     <div class="col-md-4">
                         <div class="card h-100"
-                            style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 0%, #aef5c7 100%);">
+                            style="background: linear-gradient(135deg, #ffffff 0%, {{ preg_match('/^(#[0-9a-fA-F]{3,8}|[a-zA-Z]+)$/', $sp->color) ? $sp->color : '#a7f1c0' }} 100%);">
                             <div class="card-body text-center text-dark d-flex flex-column justify-content-center py-4">
                                 <h2 style="font-weight: bold;">{{ $sp->name_package }}</h2>
                                 <p class="text-secondary mb-3" style="font-weight: bold;">PACKAGE</p>
