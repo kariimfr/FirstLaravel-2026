@@ -16,7 +16,7 @@ class BookController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $books = Book::with('bookCategory');
+            $books = Book::query()->with('bookCategory');
 
             return DataTables::of($books)
                 ->addIndexColumn()
@@ -37,9 +37,10 @@ class BookController extends Controller
                 })
 
                 ->addColumn('category_name', function ($row) {
-                    return $row->bookCategory
-                        ? $row->bookCategory->name
-                        : '-';
+                    return $row->bookCategory->name
+                        ?? $row->bookCategory->category_name
+                        ?? $row->bookCategory->title
+                        ?? '-';
                 })
 
                 ->addColumn('action', function ($row) {
@@ -143,9 +144,10 @@ class BookController extends Controller
      */
     public function show(string $id)
     {
-        $book = Book::with('bookCategory')->findOrFail($id);
+        // $book = Book::with('bookCategory')->findOrFail($id);
+        $book = Book::with(['bookCategory', 'subscriptionPackageBooks.subscriptionPackage'])->findOrFail($id);
 
-        return view('admin.books.show', compact('book'));
+        return view('user.books.show', compact('book'));
     }
 
     /**
@@ -228,5 +230,10 @@ class BookController extends Controller
         return redirect()
             ->route('admin.books.index')
             ->with('success', 'Data buku berhasil dihapus!');
+    }
+
+    public function export()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\BooksExport, 'data_buku.xlsx');
     }
 }

@@ -5,23 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\BookCategory;
 use App\Models\SubscriptionPackage;
+use App\Models\SubscriptionPackageBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 
+
 class SubscriptionPackageBookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request, $id)
     {
+        $subscriptionPackage = subscriptionPackage::findOrFail($id);
+
         if ($request->ajax()) {
             $books = Book::with('bookCategory');
 
             return DataTables::of($books)
                 ->addIndexColumn()
+                ->addColumn('category_name', function ($row) {
+                    // Pastikan 'name' di bawah ini sesuai dengan nama kolom kategori di database kamu (misal: 'name' atau 'category_name')
+                    return $row->bookCategory ? $row->bookCategory->name : '-';
+                })
 
                 ->editColumn('cover', function ($row) {
                     if ($row->cover) {
@@ -70,7 +76,17 @@ class SubscriptionPackageBookController extends Controller
                         . '</div>';
                 })
 
-                ->rawColumns(['cover', 'action'])
+                ->addColumn('checkbox', function ($row) use ($subscriptionPackage) {
+                    // yang akan di kirim de ceklis id bukunya (value=$row->id)tionPa
+                    $subscriptionPackageBook = $subscriptionPackage->subscriptionPackageBooks->pluck('book_id')->toArray();
+
+                    if (in_array($row->id, $subscriptionPackageBook)) {
+                        return '';
+                    }
+                    return '<input type="checkbox" class="book-checkbox" value="' . $row->id . '">';
+                })
+
+                ->rawColumns(['cover', 'checkbox', 'action'])
                 ->make(true);
         }
 
@@ -89,17 +105,30 @@ class SubscriptionPackageBookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
-    }
+        if (!$request->has('book_id')) {
+            return redirect()->back()->with('error', 'tidak ada buku yang dipilih.');
+        }
 
+        $bookIds = array_unique($request->input('book_id'));
+        foreach ($bookIds as $key => $value) {
+            SubscriptionPackageBook::create([
+                'subscription_package_id' => $id,
+                'book_id' => $value,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Berhasil menambahkan buku ke paket langganan');
+    }
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function showUserDetail($id)
     {
-        //
+        $subscriptionPackage = SubscriptionPackage::with(['subscriptionPackageBooks.book', 'subscriptionPackageBooks.book.bookCategory'])->findOrFail($id);
+
+        return view('admin.subscription-package-books.detail', compact('subscriptionPackage'));
     }
 
     /**

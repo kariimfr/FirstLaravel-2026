@@ -15,7 +15,11 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1>Kategori Buku</h1>
-            <a href="{{ route('admin.book-categories.create') }}" class="btn btn-primary">Tambah Data</a>
+            <a href="{{ route('admin.book-categories.create') }}" class="btn btn-outline-primary">Tambah Data</a>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1></h1>
+            <a href="{{ route('admin.book-categories.export') }}" class="btn btn-outline-success">Export</a>
         </div>
 
         <div class="card">

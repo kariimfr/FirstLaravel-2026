@@ -4,18 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['checkout_id', 'book_id', 'total_book'])]
-class Checkout extends Model
+#[Fillable(['user_id', 'payment_method', 'total_book', 'total_book_price', 'status'])]
+class CheckoutBook extends Model
 {
-    public function Checkouts(): BelongsTo
+    public function checkoutBooks(): HasMany
     {
-        return $this->belongsTo(Checkout::class);
+        return $this->hasMany(CheckoutBook::class);
     }
 
-    public function Books(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(User::class);
     }
 }

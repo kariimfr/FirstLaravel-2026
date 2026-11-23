@@ -22,9 +22,19 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Book extends Model
 {
+    // public function category()
+    // {
+    //     return $this->belongsTo(BookCategory::class, 'book_category_id');
+    // }
+
     public function bookCategory()
     {
-        return $this->belongsTo(bookCategory::class);
+        return $this->belongsTo(BookCategory::class, 'book_category_id');
+    }
+
+    public function subscriptionPackageBooks()
+    {
+        return $this->hasMany(SubscriptionPackageBook::class, 'book_id');
     }
 
     public function checkoutBooks(): HasMany

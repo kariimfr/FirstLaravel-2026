@@ -6,8 +6,8 @@
         </button>
 
         <!-- BEGIN NAVBAR LOGO -->
-        <a href="." aria-label="Tabler" class="navbar-brand navbar-brand-autodark me-3 text-blue">
-            <img src="https://www.gambaranimasi.org/data/media/53/animasi-bergerak-buku-0021.gif" width="40"
+        <a href="{{ route('home') }}" aria-label="Tabler" class="navbar-brand navbar-brand-autodark me-3 text-blue">
+            <img src="https://www.gambaranimasi.org/data/media/53/animasi-bergerak-buku-0012.gif" width="40"
                 height="50" alt="Tabler" class="navbar-brand-logo">Ebooks
         </a>
         <!-- END NAVBAR LOGO -->
@@ -58,9 +58,8 @@
                 </div>
 
                 <!-- SEARCH BAR -->
-                <form method="GET" action="{{ route('search') }}" class="dropdown mt-2">
-                    <input type="text" name="q" value="{{ request('q') }}"
-                        class="form-control form-control-rounded" placeholder="Cari judul, produk, buku, penulis..." />
+                <form method="GET" action="{{ route('search') }}" class="dropdown mt-2 input-icon">
+                    <!-- Ikon dipindah ke kiri (input-icon-start) dan padding-left ditambah agar teks tidak menabrak ikon -->
                     <span class="input-icon-addon">
                         <button type="submit" class="border-0 p-0 bg-transparent">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -71,6 +70,9 @@
                             </svg>
                         </button>
                     </span>
+                    <input type="text" name="q" value="{{ request('q') }}"
+                        class="form-control form-control-rounded ps-5"
+                        placeholder="Cari judul, produk, buku, penulis..." />
                 </form>
 
 
@@ -83,6 +85,18 @@
 
         <!-- ACTION BUTTONS -->
         <div class="flex-row order-md-last ms-auto">
+
+            <!-- Tombol Profil / Halaman Pengguna -->
+            <a href="{{ route('user.profile') }}" class="btn btn-outline-primary me-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" rounded-circle stroke-linejoin="round"
+                    class="icon">
+                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                    <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                    <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.832 2.849" />
+                </svg>
+                KR
+            </a>
             @if (Auth::check())
                 <a href="{{ route('logout') }}" class="btn btn-danger">Logout</a>
             @else

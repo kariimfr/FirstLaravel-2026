@@ -6,10 +6,16 @@ use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\SubscriptionPackageController;
 use App\Http\Controllers\SubscriptionPackageBookController;
 use App\Http\Controllers\BookController;
+use App\Http\Middleware\IsloggedIn;
+
 // ngambil data dari data base = user contoller
 Route::get('/', [UserController::class, 'home'])->name('home');
 Route::get('/search', [UserController::class, 'search'])->name('search');
+Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
 Route::get('/category/{id}', [BookCategoryController::class, 'show'])->name('category.show');
+Route::get('/subscription-packages/{id}/detail', [SubscriptionPackageBookController::class, 'showUserDetail'])
+    ->name('subscription-package-books.detail');
+
 
 Route::middleware(['IsGuest'])->group(function () {
     Route::get('/login', function () {
@@ -33,11 +39,15 @@ Route::middleware(['IsLoggedIn'])->group(function () {
             return view('admin.dashboard');
         })->name('dashboard');
 
+        Route::get('book-categories/export', [BookCategoryController::class, 'export'])->name('book-categories.export');
+        Route::get('books/export', [BookController::class, 'export'])->name('books.export');
+        Route::get('subscriptions/export', [SubscriptionPackageController::class, 'export'])->name('subscriptions.export');
+
         // package books : memilih paket langganan
         // {} path dinamis = lebih spesifik
         Route::get('/subscription-packages/{id}/books', [SubscriptionPackageBookController::class, 'index'])
             ->name('subscription-packages.books');
-        Route::post('/subscription/{id}/books', [SubscriptionPackageBookController::class, 'store'])
+        Route::post('/subscription-packages/{id}/books', [SubscriptionPackageBookController::class, 'store'])
             ->name('subscription-packages.books.store');
 
         // book category controller
@@ -48,5 +58,22 @@ Route::middleware(['IsLoggedIn'])->group(function () {
     });
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
+    // Checkout halaman (GET)
+    Route::get('/subscription-packages/{id}/checkout', [SubscriptionPackageController::class, 'checkoutPage'])
+        ->name('subscription.checkout.page');
+    // Proses Checkout (POST)
+    Route::post('/subscription-packages/{id}/checkout', [SubscriptionPackageController::class, 'checkout'])
+        ->name('subscription.checkout');
+    Route::prefix('admin')->name('admin.')->group(function () {});
+
+
+    // Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+    // Route::post('/profile/photo', [UserController::class, 'updatePhoto'])->name('user.profile.photo');
+    Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::post('/profile/photo', [UserController::class, 'updatePhoto'])->name('user.profile.photo');
+});
 // patch update salah satu data
 // put update seluruh data = tidak error

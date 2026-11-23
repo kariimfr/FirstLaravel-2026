@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SubscriptionPackage;
+use App\Models\SubscriptionPackageUser;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\SubscriptionPlansExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 
 class SubscriptionPackageController extends Controller
 {
@@ -36,7 +42,7 @@ class SubscriptionPackageController extends Controller
                             ' . $method . '
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Apakah Anda yakin ingin menghapus paket ini?\')">Hapus</button>
                         </form>' . "<a href='" . route('admin.subscription-packages.books', $row->id) . "'
-                    class='btn btn-sm btn-secondary'>pilih buku</a>";
+                    class='btn btn-sm btn-primary'>pilih buku</a>";
                 })
                 ->rawColumns(['action'])
                 ->toJson();
@@ -84,9 +90,27 @@ class SubscriptionPackageController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    public function checkoutPage($id)
+    {
+        $subscriptionPackage = SubscriptionPackage::findOrFail($id);
+        $code = $subscriptionPackage->id . '-' . Auth::id();
+        return view('user.subscription-packages.checkout', compact('subscriptionPackage', 'code'));
+    }
+
+    public function checkout(Request $request, $id)
+    {
+        $subscriptionPackage = SubscriptionPackage::findOrFail($id);
+
+        SubscriptionPackageUser::create([
+            'subscription_package_id' => $subscriptionPackage->id,
+            'user_id' => Auth::id(),
+            // 30 hari dari sekarang, format tahun-bulan-tanggal
+            'expired_date' => now()->addDays(30)->format('Y-m-d'),
+        ]);
+
+        return redirect()->route('home')->with('success', 'Pembayaran berhasil. Terima kasih telah berlangganan!');
+    }
+
     public function edit($id)
     {
         $subscription = SubscriptionPackage::findOrFail($id);
@@ -121,5 +145,10 @@ class SubscriptionPackageController extends Controller
         $subscription->delete();
 
         return redirect()->route('admin.subscriptions.index')->with('success', 'Paket langganan berhasil dihapus.');
+    }
+
+    public function export()
+    {
+        return Excel::download(new SubscriptionPlansExport, 'data_paket_langganan.xlsx');
     }
 }

@@ -13,7 +13,9 @@
             <h2 class="fw-bold">Paket Langganan</h2>
 
             {{-- mengarahkan (link) -> route khusus (create) menggunakan method GET --}}
-            <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-primary">Tambah Data</a>
+            <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-outline-primary">Tambah Data</a>
+            <a href="{{ route('admin.subscriptions.export') }}" class="btn btn-outline-primary">Export</a>
+
         </div>
 
         <div class="card border-0 shadow-sm rounded-4 p-4">

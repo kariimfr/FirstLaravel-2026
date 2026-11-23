@@ -69,23 +69,25 @@
             <!-- Kontainer Baris -->
             <div class="row g-4">
                 @foreach ($subscriptionPackages as $sp)
-                    <!-- KARTU -->
-                    <div class="col-md-4">
-                        <div class="card h-100"
-                            style="background: linear-gradient(135deg, #ffffff 0%, {{ preg_match('/^(#[0-9a-fA-F]{3,8}|[a-zA-Z]+)$/', $sp->color) ? $sp->color : '#a7f1c0' }} 100%);">
-                            <div class="card-body text-center text-dark d-flex flex-column justify-content-center py-4">
-                                <h2 style="font-weight: bold;">{{ $sp->name_package }}</h2>
-                                <p class="text-secondary mb-3" style="font-weight: bold;">PACKAGE</p>
-                                <div>
-                                    Rp <span style="font-size: 2rem; font-weight: bold;" class="text-warning">
-                                        {{ number_format($sp->price, 0, ',', '.') }}
-                                    </span>
-                                    <br>
-                                    <span class="text-secondary" style="font-weight: bold; margin: 0 !important;">/30
-                                        days</span>
+                    <!-- KARTU DI BUNGKUS DENGAN TAG A SUPAYA BISA DIKLIK -->
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ route('subscription-package-books.detail', $sp->id) }}" class="text-decoration-none">
+                            <div class="card h-100 shadow-sm border-0"
+                                style="background: linear-gradient(135deg, #ffffff 0%, {{ preg_match('/^(#[0-9a-fA-F]{3,8}|[a-zA-Z]+)$/', $sp->color) ? $sp->color : '#a7f1c0' }} 100%);">
+                                <div class="card-body text-center text-dark d-flex flex-column justify-content-center py-4">
+                                    <h2 style="font-weight: bold;">{{ $sp->name_package }}</h2>
+                                    <p class="text-secondary mb-3" style="font-weight: bold;">PACKAGE</p>
+                                    <div>
+                                        Rp <span style="font-size: 2rem; font-weight: bold;" class="text-warning">
+                                            {{ number_format($sp->price, 0, ',', '.') }}
+                                        </span>
+                                        <br>
+                                        <span class="text-secondary" style="font-weight: bold; margin: 0 !important;">/30
+                                            days</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 @endforeach
             </div>
@@ -96,6 +98,7 @@
                 <h2 class="text-dark mt-3" style="font-weight: bold;">Buku Baru Dirilis</h2>
             </div>
             <div id="wrapper-slider">
+
                 @foreach ($latestBooks as $book)
                     <div class="px-2">
                         <div class="card">
@@ -107,8 +110,12 @@
                                 </div>
                                 <div>
                                     <h5>
-                                        <span style="font-size: 0,8rem">{{ $book['writer'] }}</span>
-                                        <br><span style="font-size: 1rem;">{{ $book['title'] }}</span>
+                                        <span style="font-size: 0.8rem">{{ $book['writer'] }}</span>
+                                        <br>
+                                        <a href="{{ route('books.show', $book->id) }}" style="font-size: 1rem"
+                                            class="text-decoration-none text-dark">
+                                            {{ $book->title }}
+                                        </a>
                                     </h5>
                                     <h4 style="font-size: 1.2rem; font-weight: bold;">Rp.
                                         {{ number_format($book['price'], 0, ',', '.') }}</h4>

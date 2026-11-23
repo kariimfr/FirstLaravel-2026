@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BookCategoriesExport;
 use App\Models\User;
+use App\Models\CheckoutBook;
 use App\Models\Book;
 use App\Models\SubscriptionPackage;
 use App\Models\SubscriptionPackageUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataExport;
+
 
 // autentication
 use Illuminate\Support\Facades\Auth;
@@ -104,5 +110,57 @@ class UserController extends Controller
             ->get();
 
         return view('search_results', compact('books', 'query'));
+    }
+
+    public function profile()
+    {
+        // ID user 
+        $userId = Auth::id();
+
+        // pembleian buku
+        $bookCount = CheckoutBook::where('checkout_id', $userId)->count();
+
+        // transaksi
+        $subscriptionCount = SubscriptionPackageUser::where('user_id', $userId)->count();
+
+        // riwayat
+        $transactions = SubscriptionPackageUser::with('subscriptionPackage')
+            ->where('user_id', $userId)
+            ->get();
+
+        // mengirim data dari Controller 
+        return view('user.profile', compact('bookCount', 'subscriptionCount', 'transactions'));
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,mov,jpg,webp|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        // Hapus foto lama jika ada
+        if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+            Storage::disk('public')->delete($user->photo);
+        }
+
+        // Simpan foto baru ke folder storage/app/public/profile-photos
+        $path = $request->file('photo')->store('profile-photos', 'public');
+
+        // Update database
+        // Update database secara manual
+        /** @var \App\Models\User $user */
+        $user->update(['photo' => $path]);
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    public function createExcel()
+    {
+        // Tentukan nama file hasil download
+        $file_name = 'laporan_data.xlsx'; // Bisa diganti '.csv' jika ingin format CSV
+
+        return Excel::download(new BookCategoriesExport, $file_name);
     }
 }

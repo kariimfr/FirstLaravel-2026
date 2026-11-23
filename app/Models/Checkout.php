@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany; // <-- Tambahkan ini
 
 #[Fillable(['user_id', 'payment_method', 'total_book', 'total_book_price', 'status'])]
 class CheckoutBook extends Model
