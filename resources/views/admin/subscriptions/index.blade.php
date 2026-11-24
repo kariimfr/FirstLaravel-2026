@@ -9,14 +9,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">Paket Langganan</h2>
 
-            {{-- mengarahkan (link) -> route khusus (create) menggunakan method GET --}}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Paket Langganan</h1>
             <a href="{{ route('admin.subscriptions.create') }}" class="btn btn-outline-primary">Tambah Data</a>
-            <a href="{{ route('admin.subscriptions.export') }}" class="btn btn-outline-primary">Export</a>
-
         </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1></h1>
+            <a href="{{ route('admin.subscriptions.export') }}" class="btn btn-outline-success">Export</a>
+        </div>
+
 
         <div class="card border-0 shadow-sm rounded-4 p-4">
             <div class="table-responsive">

@@ -30,7 +30,7 @@
         <!-- 3. Daftar Buku -->
         <div class="row g-3">
             @forelse ($books as $book)
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="card h-100">
                         <div class="card-body text-center">
                             <div class="w-100 mb-2">

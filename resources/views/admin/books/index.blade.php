@@ -12,14 +12,16 @@
                 </ul>
             </div>
         @endif
-        <div class="d-flex justify-content-between">
-            <h3>Data Buku</h3>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Data Buku</h1>
             <a href="{{ route('admin.books.create') }}" class="btn btn-outline-primary">Tambah Buku</a>
         </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1></h1>
             <a href="{{ route('admin.books.export') }}" class="btn btn-outline-success">Export</a>
         </div>
+
+
 
 
         <table class="table table-bordered mt-5" id="books-table">
